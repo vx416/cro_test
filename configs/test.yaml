@@ -1,0 +1,21 @@
+app:
+  env: "dev"
+  name: "cro_test"
+  log:
+    level: "debug"
+  host: ":8080"
+
+jwt.secret: "test"
+
+mysql:
+  host: "localhost"
+  port: "13306"
+  user: "test"
+  password: "test"
+  db: "cro_test"
+  options: "parseTime=true"  
+
+redis:
+  host: "localhost"
+  port: "16379"
+  db: 1

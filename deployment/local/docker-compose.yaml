@@ -1,0 +1,37 @@
+version: '3'
+
+services:
+  db:
+    image: mysql/mysql-server:5.7
+    environment:
+      - MYSQL_ROOT_PASSWORD=test
+      - MYSQL_DATABASE=${MYSQL_DB}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+    networks:
+      - cro_test
+  app:
+    image: vicxu/cro-test:latest
+    restart: always
+    depends_on:
+      - db
+    volumes:
+      - ../../build/migrations:/cro_test/build/migrations
+      - ../../log:/cro_test/log
+    environment:
+      - MYSQL_DB=${MYSQL_DB}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_HOST=${MYSQL_HOST}
+      - MYSQL_PROT=3306
+      - APP_ENV=${APP_ENV}
+      - RUN_MIGRATIONS=true
+      - APP_LOG_OUTPUTS=/cro_test/log/output.log
+    ports:
+      - 8080:8080 
+    networks:
+      - cro_test
+
+networks:
+  cro_test:
+    driver: bridge

@@ -1,0 +1,9 @@
+{
+    "securityDefinitions": {
+        "Bearer": {
+            "type": "apiKey",
+            "name": "Authentication",
+            "in": "header"
+        }
+    }
+}

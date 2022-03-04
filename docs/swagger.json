@@ -1,0 +1,417 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "This is a sample server celler server.",
+        "title": "Swagger Example API",
+        "termsOfService": "http://swagger.io/terms/",
+        "contact": {
+            "name": "API Support",
+            "url": "http://www.swagger.io/support",
+            "email": "support@swagger.io"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        },
+        "version": "1.0"
+    },
+    "host": "localhost:8080",
+    "basePath": "/api/v1",
+    "paths": {
+        "/auth": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Login",
+                "parameters": [
+                    {
+                        "description": "auth",
+                        "name": "AuthRequest",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/http.AuthRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "model"
+                        }
+                    }
+                }
+            }
+        },
+        "/deposit": {
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "transaction"
+                ],
+                "summary": "create deposit",
+                "parameters": [
+                    {
+                        "description": "only toWalletSerial and amount",
+                        "name": "TranscationRequest",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/http.TransactionRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/http.TransactionResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "not wallet owner",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "422": {
+                        "description": "wallet balance insufficient",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/ping": {
+            "get": {
+                "tags": [
+                    "ping"
+                ],
+                "summary": "Ping",
+                "responses": {
+                    "200": {
+                        "description": "ok",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/signup": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "auth"
+                ],
+                "summary": "SingUp",
+                "parameters": [
+                    {
+                        "description": "auth",
+                        "name": "AuthRequest",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/http.AuthRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "ok",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/transfer": {
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "transaction"
+                ],
+                "summary": "create transfer",
+                "parameters": [
+                    {
+                        "description": "transaction request",
+                        "name": "TranscationRequest",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/http.TransactionRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/http.TransactionResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "not wallet owner",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "422": {
+                        "description": "wallet balance insufficient",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/wallets": {
+            "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "tags": [
+                    "wallet"
+                ],
+                "summary": "list wallets by userID",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.Wallet"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "wallet"
+                ],
+                "summary": "create wallet by email",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.Wallet"
+                        }
+                    }
+                }
+            }
+        },
+        "/wallets/{serial}": {
+            "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "tags": [
+                    "wallet"
+                ],
+                "summary": "get wallet by serial number",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Wallet Serail Number",
+                        "name": "serial",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.Wallet"
+                        }
+                    }
+                }
+            }
+        },
+        "/withdraw": {
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "transaction"
+                ],
+                "summary": "create deposit",
+                "parameters": [
+                    {
+                        "description": "only fromWalletSerial and amount",
+                        "name": "TranscationRequest",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/http.TransactionRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/http.TransactionResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "not wallet owner",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "422": {
+                        "description": "wallet balance insufficient",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "http.AuthRequest": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "http.TransactionRequest": {
+            "type": "object",
+            "properties": {
+                "amount": {
+                    "type": "string"
+                },
+                "fromWalletSerial": {
+                    "type": "string"
+                },
+                "toWalletSerial": {
+                    "type": "string"
+                }
+            }
+        },
+        "http.TransactionResponse": {
+            "type": "object",
+            "properties": {
+                "fromWalletBalance": {
+                    "type": "string"
+                },
+                "toWalletBalance": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.Transaction": {
+            "type": "object",
+            "properties": {
+                "createdAti": {
+                    "type": "integer"
+                },
+                "fromWalletID": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "kind": {
+                    "type": "integer"
+                },
+                "toWalletID": {
+                    "type": "integer"
+                },
+                "txAmount": {
+                    "type": "number"
+                }
+            }
+        },
+        "model.Wallet": {
+            "type": "object",
+            "properties": {
+                "amount": {
+                    "type": "number"
+                },
+                "createdAti": {
+                    "type": "integer"
+                },
+                "serialNumber": {
+                    "type": "string"
+                },
+                "transactions": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.Transaction"
+                    }
+                },
+                "updatedAti": {
+                    "type": "integer"
+                },
+                "userID": {
+                    "type": "integer"
+                }
+            }
+        }
+    }
+}

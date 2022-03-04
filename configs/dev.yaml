@@ -1,0 +1,16 @@
+app:
+  env: "dev"
+  name: "cro_dev"
+  log:
+    level: "debug"
+  host: ":8080"
+
+jwt.secret: "test"
+
+mysql:
+  host: "localhost"
+  port: "3306"
+  user: "test"
+  password: "test"
+  db: "cro_local"
+  options: "parseTime=true"  

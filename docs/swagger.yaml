@@ -1,0 +1,262 @@
+basePath: /api/v1
+definitions:
+  http.AuthRequest:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    type: object
+  http.TransactionRequest:
+    properties:
+      amount:
+        type: string
+      fromWalletSerial:
+        type: string
+      toWalletSerial:
+        type: string
+    type: object
+  http.TransactionResponse:
+    properties:
+      fromWalletBalance:
+        type: string
+      toWalletBalance:
+        type: string
+    type: object
+  model.Transaction:
+    properties:
+      createdAti:
+        type: integer
+      fromWalletID:
+        type: integer
+      id:
+        type: integer
+      kind:
+        type: integer
+      toWalletID:
+        type: integer
+      txAmount:
+        type: number
+    type: object
+  model.Wallet:
+    properties:
+      amount:
+        type: number
+      createdAti:
+        type: integer
+      serialNumber:
+        type: string
+      transactions:
+        items:
+          $ref: '#/definitions/model.Transaction'
+        type: array
+      updatedAti:
+        type: integer
+      userID:
+        type: integer
+    type: object
+host: localhost:8080
+info:
+  contact:
+    email: support@swagger.io
+    name: API Support
+    url: http://www.swagger.io/support
+  description: This is a sample server celler server.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Swagger Example API
+  version: "1.0"
+paths:
+  /auth:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: auth
+        in: body
+        name: AuthRequest
+        required: true
+        schema:
+          $ref: '#/definitions/http.AuthRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: model
+      summary: Login
+      tags:
+      - auth
+  /deposit:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: only toWalletSerial and amount
+        in: body
+        name: TranscationRequest
+        required: true
+        schema:
+          $ref: '#/definitions/http.TransactionRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/http.TransactionResponse'
+        "401":
+          description: not wallet owner
+          schema:
+            type: string
+        "422":
+          description: wallet balance insufficient
+          schema:
+            type: string
+      security:
+      - Bearer: []
+      summary: create deposit
+      tags:
+      - transaction
+  /ping:
+    get:
+      responses:
+        "200":
+          description: ok
+          schema:
+            type: string
+      summary: Ping
+      tags:
+      - ping
+  /signup:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: auth
+        in: body
+        name: AuthRequest
+        required: true
+        schema:
+          $ref: '#/definitions/http.AuthRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok
+          schema:
+            type: string
+      summary: SingUp
+      tags:
+      - auth
+  /transfer:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: transaction request
+        in: body
+        name: TranscationRequest
+        required: true
+        schema:
+          $ref: '#/definitions/http.TransactionRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/http.TransactionResponse'
+        "401":
+          description: not wallet owner
+          schema:
+            type: string
+        "422":
+          description: wallet balance insufficient
+          schema:
+            type: string
+      security:
+      - Bearer: []
+      summary: create transfer
+      tags:
+      - transaction
+  /wallets:
+    get:
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Wallet'
+      security:
+      - Bearer: []
+      summary: list wallets by userID
+      tags:
+      - wallet
+    post:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Wallet'
+      security:
+      - Bearer: []
+      summary: create wallet by email
+      tags:
+      - wallet
+  /wallets/{serial}:
+    get:
+      parameters:
+      - description: Wallet Serail Number
+        in: path
+        name: serial
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Wallet'
+      security:
+      - Bearer: []
+      summary: get wallet by serial number
+      tags:
+      - wallet
+  /withdraw:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: only fromWalletSerial and amount
+        in: body
+        name: TranscationRequest
+        required: true
+        schema:
+          $ref: '#/definitions/http.TransactionRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/http.TransactionResponse'
+        "401":
+          description: not wallet owner
+          schema:
+            type: string
+        "422":
+          description: wallet balance insufficient
+          schema:
+            type: string
+      security:
+      - Bearer: []
+      summary: create deposit
+      tags:
+      - transaction
+swagger: "2.0"
